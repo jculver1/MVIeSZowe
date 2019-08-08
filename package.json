@@ -1,0 +1,62 @@
+{
+  "name": "root",
+  "version": "1.0.0",
+  "private": true,
+  "useWorkspaces": true,
+  "npmClient": "yarn",
+  "workspaces": [
+    "packages/*",
+    "webClient"
+  ],
+  "engines": {
+    "node": "^8.10.0 || >=9.10.0"
+  },
+  "scripts": {
+    "build-storybook": "build-storybook",
+    "storybook": "start-storybook -p 6006",
+    "start": "npm-run-all --parallel storybook",
+    "clean": "yarn clean-root && cross-env TASK=\"clean\" lerna run execute:task --stream",
+    "clear": "cross-env TASK=\"clear\" lerna run execute:task --stream",
+    "build-lib": "cross-env TASK=\"build-lib\" lerna run execute:task --stream",
+    "build-types": "cross-env TASK=\"build-types\" lerna run execute:task --stream",
+    "build-package": "cross-env TASK=\"build-package\" lerna run execute:task --stream",
+    "compile": "cross-env TASK=\"build-lib\" lerna run execute:task --stream",
+    "check-types": "cross-env TASK=\"check-types\" lerna run execute:task --stream",
+    "test": "cross-env TASK=\"test\" lerna run execute:task --stream",
+    "lint": "cross-env TASK=\"lint\" lerna run execute:task --stream",
+    "lint-fix": "cross-env TASK=\"lint-fix\" lerna run execute:task --stream",
+    "stylelint": "cross-env TASK=\"stylelint\" lerna run execute:task --stream",
+    "stylelint-fix": "cross-env TASK=\"stylelint-fix\" lerna run execute:task --stream",
+    "check-dependencies": "cross-env TASK=\"check-dependencies\" lerna run execute:task --stream",
+    "update-version": "lerna publish --skip-git --skip-npm --force-publish '*'",
+    "check-packages": "yarn clean --verbose && yarn compile --verbose && yarn test --verbose && yarn lint --verbose",
+    "publish-packages": "./scripts/publish",
+    "build-dev": "lerna run --scope @nwtn/MVIeSZowe build:dev --stream",
+    "build-zowe": "lerna run --scope @nwtn/MVIeSZowe build:zowe --stream",
+    "build-zowe-watch": "lerna run --scope @nwtn/MVIeSZowe build:zowe:watch --stream",
+    "build-zowe-prod": "lerna run --scope @nwtn/MVIeSZowe build:zowe:prod --stream",
+    "build-ci": "lerna run --scope @nwtn/MVIeSZowe build:ci --stream",
+    "start-dev": "lerna run --scope @nwtn/MVIeSZowe start:dev --stream",
+    "postinstallbak": "npm-run-all --parallel bootstrap install-leibniz",
+    "postinstall": "npm-run-all --parallel bootstrap install-leibniz",
+    "setup": "npm-run-all --parallel bootstrap install-leibniz",
+    "bootstrap": "lerna bootstrap",
+    "install-leibniz": "node scripts/post-install.js --stream",
+    "pre-commit": "yarn lint-staged",
+    "pre-push": "yarn lint-staged ",
+    "check-dependencies-yarn": "yarn check",
+    "clean-root": "shx rm -rf node_modules && shx rm -rf package-lock.json && shx rm -rf yarn.lock && shx rm -rf web",
+    "prebuild-zowe": "yarn check-types",
+    "prebuild-zowe-prod": "yarn check-types"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "lerna": "3.13.4",
+    "npm-run-all": "^4.1.5"
+  },
+  "pluginType": "application",
+  "dependencies": {
+    "react-sticky-box": "^0.8.0",
+    "shelljs": "^0.8.3"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "extends": "../packages/baseline-configuration/tsconfig.base.json",
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "src/**/__stories__/*",
+    "src/**/__tests__/*"
+  ]
+}

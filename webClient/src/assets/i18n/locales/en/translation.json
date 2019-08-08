@@ -1,0 +1,163 @@
+{
+  "back": "Back",
+  "cancel": "Cancel",
+  "error": "Error",
+  "greeting": "Good Morning, Tim Willging",
+  "siteRules": {
+    "addNewRule": "Add new rule",
+    "assignModal": {
+      "assignToAllApps": "Assign to all current and future applications",
+      "conflicts": "Conflicts",
+      "conflictingRuleNum": "{{count}} conflicting rule",
+      "conflictingRuleNum_plural": "{{count}} conflicting rules",
+      "override": "Override",
+      "overrideTooltip": "If this rule is assigned to {{item}}, the rule will overwrite any previous rules that conflict"
+    },
+    "batch": {
+      "apps": "Assign to Applications",
+      "delete": "Delete Rules",
+      "envs": "Assign to Environments"
+    },
+    "createRuleModal": {
+      "formTip": "Try to keep it simple and separate rules that aren't related. You can apply as many rules as you like.",
+      "listCaption": "Input as comma separated values: ASCII, UNICODE, EBCDIC",
+      "multiSelectLabel": "Select one or more of the following: ",
+      "nameField": "Simple rule name (optional)",
+      "next": "Next",
+      "none": "none",
+      "type": {
+        "create": "Create",
+        "createTitle": "Create rule",
+        "duplicate": "Duplicate",
+        "duplicateTitle": "Duplicate rule",
+        "edit": "Edit",
+        "editTitle": "Edit rule",
+        "view": "View",
+        "viewTitle": "View rule"
+      },
+      "validMatches": "Valid matches:",
+      "validName": "Name is too long",
+      "validNumber": "Enter a valid number",
+      "validText": "Enter a valid string",
+      "vtype": {
+        "absent": "absent",
+        "approval": "approval",
+        "endsWith": "ends with",
+        "greaterThan": "greater than",
+        "inList": "in list",
+        "inRange": "in range",
+        "lessThan": "less than",
+        "mustBe": "must be",
+        "mustNotBe": "must not be",
+        "newColumnsAtEnd": "new columns at end",
+        "notInList": "not in list",
+        "present": "present",
+        "startsWith": "starts with",
+        "stringLike": "string like",
+        "stringNotLike": "string not like"
+      },
+      "wildCardsContent%": "Any number of characters",
+      "wildCardsContent_": "Any single character. You can stack these, e.g. AB12CD3 would match the pattern _ _ _ _ _ _",
+      "wildCardsContent#": "Any single digit",
+      "wildCardsSubtitle": "Wild cards"
+    },
+    "deleteModal": {
+      "primaryBtn": "Delete",
+      "secondaryBtn": "Cancel",
+      "subtitle": "Are you sure you want to delete the following rule(s):",
+      "title": "Delete Rule(s)"
+    },
+    "errors": {
+      "add": "There was an error adding the site rule.",
+      "delete": "There was an error deleting the site rule.",
+      "dropdown": "Unable to retrieve updated dropdown information",
+      "fetch": "There was an error fetching site rules.",
+      "fetchApps": "There was an error fetching applications.",
+      "fetchEnvs": "There was an error fetching environments.",
+      "save": "There was an error saving the site rule."
+    },
+    "lockTooltip": "This rule was created by someone outside your team. Please contact your site administrator to request changes",
+    "overflow": {
+      "assignToApp": "Assign to application",
+      "assignToEnv": "Assign to environment",
+      "delete": "Delete rule",
+      "duplicate": "Duplicate rule",
+      "edit": "Edit rule",
+      "view": "View rule"
+    },
+    "subTitle": "Administration Experience",
+    "title": "Manage Site Rules",
+    "tableHeaders": {
+      "apps": "Applications",
+      "envs": "Environments",
+      "name": "Name",
+      "rule": "Rule"
+    },
+    "verificationTypes": {
+      "absent": "{{object}} {{attribute}} must be absent",
+      "approval": "{{object}} {{attribute}} require approval",
+      "endsWith": "{{object}} {{attribute}} must end with {{pattern}}",
+      "greaterThan": "{{object}} {{attribute}} must be greater than {{lowerBound}}",
+      "inList": "{{object}} {{attribute}} must be one of the following: {{list}}",
+      "inRange": "{{object}} {{attribute}} must be within the range: {{range}}",
+      "lessThan": "{{object}} {{attribute}} must be less than {{upperBound}}",
+      "like": "{{object}} {{attribute}} must be like {{pattern}}",
+      "mustBe": "{{object}} {{attribute}} must equal {{pattern}}",
+      "mustNotBe": "{{object}} {{attribute}} must not equal {{pattern}}",
+      "newColumnsAtEnd": "{{object}} must have new columns added at the end",
+      "notInList": "{{object}} {{attribute}} must not be one of the following: {{list}}",
+      "notLike": "{{object}} {{attribute}} must not be like {{pattern}}",
+      "present": "{{object}} {{attribute}} must be present",
+      "startsWith": "{{object}} {{attribute}} must start with {{pattern}}"
+    }
+  },
+  "sqlProcessor": {
+    "connection": "Connection",
+    "enterNewStatement": "Enter a new statement",
+    "errors": {
+      "sqlPost": "There was an error posting the SQL statements",
+      "subsysFetch": "There was an error fetching subsystems."
+    },
+    "newSql": "New SQL Statements",
+    "noRecent": "No Recent Statements",
+    "recent": "Recent Statements",
+    "send": "Send Statement(s)",
+    "title": "SQL Processor"
+  },
+  "teams": {
+    "assign": "Assign",
+    "assignEnvironment": "Assign Environments",
+    "assignEnvironments": "Assign Environment",
+    "cancel": "Cancel",
+    "create": "Create",
+    "createTeam": "Create team",
+    "delete": "Delete",
+    "deleteConfirmation": "Are you sure you want to delete ",
+    "deleteTeam": "Delete team",
+    "editCreateSubtitle": "Define teams for your organization. You can assign environments to be used by this team.",
+    "enterTeamName": "Enter name",
+    "environment": "Environment",
+    "environments": "Environments",
+    "id": "Profile",
+    "ids": "Subsystem IDs",
+    "instanceLimit": "Instance limit",
+    "invalidTeamName": "Enter a valid team name",
+    "name": "Name",
+    "noAdmins": "Team administrators are defined based on security classes. Go to Users page to manage them after this team is created.",
+    "noEnvs": "No environments have been assigned to this team",
+    "removeEnvironment": "Remove this environment",
+    "save": "Save",
+    "searchTeams": "Search teams",
+    "selectEnv": "Select the environments that you want to assign to this team.",
+    "subsystemIds": "Subsystem IDs",
+    "subsystemType": "Type",
+    "team": "Team",
+    "teamAdmins": "Team administrators",
+    "teamAdminsInfo": "Team administrators are defined based on security classes. Go to the Users page to manage them.",
+    "teamName": "Team name",
+    "teams": "Teams",
+    "teamSubtitle": "Most companies using IBM z/OS Experience have multiple developments Teams with differing environments.",
+    "type": "Type",
+    "user": "User"
+  }
+}

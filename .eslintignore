@@ -1,0 +1,11 @@
+coverage/
+lib/
+dist/
+webpack/
+node_modules/
+*.config.js
+package/
+web/
+lib/
+@types/
+execute-task.js

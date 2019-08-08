@@ -1,0 +1,20 @@
+{
+  "name": "@nwtn/MVIeSZowe",
+  "version": "1.0.1",
+  "description": "Multi Value Cloud Experience Unified Experience Web Application",
+  "license": "Apache-2",
+  "scripts": {
+    "start:dev": "cross-env ZOWE=FALSE NODE_ENV=development webpack-dev-server --open --colors",
+    "build:dev": "cross-env ZOWE=FALSE NODE_ENV=development webpack --progress --display-error-details --colors",
+    "build:zowe": "cross-env ZOWE=TRUE NODE_ENV=development webpack --display-error-details --colors",
+    "build:zowe:watch": "cross-env ZOWE=TRUE NODE_ENV=production webpack --display-error-details --colors --watch",
+    "build:zowe:prod": "cross-env ZOWE=TRUE NODE_ENV=production webpack --display-error-details --colors",
+    "build:cli": "cross-env ZOWE=FALSE NODE_ENV=development webpack --progress --display-error-details",
+    "execute:task": "cross-env-shell lerna exec --scope @nwtn/MVIeSZowe node ./execute-task.js $TASK"
+  },
+  "dependencies": {
+    "@nwtn/baseline-configuration": "^1.0.1",
+    "cross-env": "^5.2.0",
+    "lodash": "^4.17.11"
+  }
+}

@@ -1,0 +1,46 @@
+### Debug
+DST_DIR="/u/nwtn01/doe-pax"
+DOE_SERVER_NAME="doeserver"
+DOE_SERVER_BRANCH="master,features,defects"
+DOE_UI_NAME="doeui"
+DOE_UI_BRANCH="master,features,defects"
+DOE_INSTALLER_NAME="installer"
+DOE_INSTALLER_BRANCH="master,features,defects"
+
+### Initialize
+SSH_USER="nwtn01"
+SSH_HOST="rs22.rocketsoftware.com"
+DOE_UI_NAME_GIT=$DOE_UI_NAME.git
+DOE_INSTALLER_NAME_GIT=$DOE_INSTALLER_NAME.git
+DOE_SERVER_NAME_GIT=$DOE_SERVER_NAME.git
+
+### DevOps Server
+DOE_SERVER_PACKAGE_NAME=$DOE_SERVER_NAME-$DOE_VERSION-`date +%Y%m%d`
+docker build -t doe:server -f $DOE_SERVER_NAME_GIT/Dockerfile .
+docker run -t --rm --entrypoint "/bin/bash" -w $WORKSPACE/$DOE_SERVER_NAME_GIT -v $WORKSPACE:$WORKSPACE:rw,z -e GIT_USR=$GIT_USR -e GIT_PSW=$GIT_PSW doe:server ci/jenkins_scripts/build.sh
+bash $DOE_SERVER_NAME_GIT/newton/ci/jenkins_scripts/package.sh $DOE_SERVER_NAME_GIT $DOE_SERVER_NAME "release"
+mv $DOE_SERVER_NAME.tar $DOE_SERVER_PACKAGE_NAME.tar
+
+# deploy
+bash $DOE_SERVER_NAME_GIT/newton/ci/jenkins_scripts/deploy_to_host.sh "$SSH_USER@$SSH_HOST" "$DST_DIR" "$DOE_SERVER_PACKAGE_NAME" "pax" "$DST_PDS"
+#cat ${ssh_user}_ssh.log
+
+### DevOps UI
+DOE_UI_PACKAGE_NAME=$DOE_UI_NAME-$DOE_VERSION-`date +%Y%m%d`
+docker build -t doe:ui -f $DOE_INSTALLER_NAME_GIT/Dockerfile .
+
+## newton-devops
+docker run -t --rm -w $WORKSPACE/$DOE_UI_NAME_GIT -v $WORKSPACE:$WORKSPACE:rw,z -e CI=true doe:ui npm install
+docker run -t --rm -w $WORKSPACE/$DOE_UI_NAME_GIT -v $WORKSPACE:$WORKSPACE:rw,z doe:ui npm run build
+cd $WORKSPACE/$DOE_UI_NAME_GIT/ && sh scripts/prepare_release.sh $WORKSPACE/$DOE_UI_NAME/
+cd -
+
+## newton-devops-wizard
+echo "bash $WORKSPACE/$DOE_INSTALLER_NAME_GIT/ci/jenkins_scripts/build.sh ~/zlux; cd ~/zlux/newton-devops-wizard/ && bash ci/jenkins_scripts/prepare_release.sh $WORKSPACE/$DOE_INSTALLER_NAME/" > $WORKSPACE/$DOE_INSTALLER_NAME_GIT/jenkins_build.sh
+docker run -t --rm --entrypoint "/bin/bash" -w $WORKSPACE/$DOE_INSTALLER_NAME_GIT -v $WORKSPACE:$WORKSPACE:rw,z doe:ui jenkins_build.sh
+tar -cf $DOE_UI_PACKAGE_NAME.tar $DOE_UI_NAME/ $DOE_INSTALLER_NAME/
+
+# deploy
+bash $DOE_SERVER_NAME_GIT/newton/ci/jenkins_scripts/deploy_to_host.sh "$SSH_USER@$SSH_HOST" "$DST_DIR" "$DOE_UI_PACKAGE_NAME" "pax" "$DST_PDS"
+#cat ${ssh_user}_ssh.log
+cat slacklogfile.txt

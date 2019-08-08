@@ -1,0 +1,11 @@
+{
+  "extends": "../../../zlux-app-manager/virtual-desktop/plugin-config/tsconfig.react.base.json",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "noEmit": true,
+    "allowJs": true,
+    "listFiles": true,
+    "isolatedModules": false,
+    "esModuleInterop": true
+  }
+}

@@ -1,0 +1,233 @@
+pipeline {
+    agent {
+        docker { 
+            image 'circleci/node:latest'
+            args '-p 3000:3000'
+        }
+    }
+    
+    tools {
+        nodejs 'nodejs-11'
+    }
+  
+    parameters {
+        string(name: 'BRANCH', defaultValue: 'feature/typescript-config', description: 'Branch to build')
+    }
+    
+    environment {
+        CI = 'true'
+        HOME='.'
+        MVD_DESKTOP_DIR='../../zlux-app-manager/virtual-desktop'
+        BRANCH="${params.BRANCH}"
+        SSH_USER_ZOS='nwtn01'
+        SSH_HOSTNAME_ZOS='rs23.rocketsoftware.com'
+        PACKAGE_NAME='newton-unified-ui'
+        DEPLOY_DIR_ZOS='/u/nwtn01/newton-unified-ui-ryan'
+    }
+    
+    stages {
+        stage('Print settings') {
+            steps {
+                sh 'env'
+                echo "PATH: $PATH"          // This path is Jenkins
+                sh 'echo "PATH is $PATH"'   // This path is dockers
+            }
+        }
+
+        stage('Cleanup') {
+            steps {
+                echo 'Entered Cleanup'
+                cleanWs()
+                deleteDir()
+            }
+        }
+        
+        stage('Checkout Newton Unified UI') {
+            steps {
+                echo 'Entered Newton Unified UI'
+                checkout([
+                    $class: 'GitSCM', 
+                    branches: [[name: '*/' + BRANCH]], 
+                    doGenerateSubmoduleConfigurations: false, 
+                    extensions: [], 
+                    submoduleCfg: [], 
+                    userRemoteConfigs: [[
+                        credentialsId: 'jenkins_git', 
+                        url: 'https://git.rocketsoftware.com/scm/nwtn/newton-unified-ui.git'
+                    ]]
+                ])
+            }
+        }
+        
+        stage('Tar Newton Unified UI') {
+            steps {
+                echo 'Entered Tar Newton Unified UI'
+                sh 'tar -cf newton-unified-ui.tar.gz .'
+                // sh 'find . -type f ! -name "newton-unified-ui.tar.gz" -delete'
+                // sh 'find . -type d ! -name "newton-unified-ui.tar.gz" -delete'
+                //sh 'find . -type d ! -regex ".*/\\(newton-unified-ui.tar.gz\\)" -delete'
+            }
+        }
+        
+        stage('Checkout Zowe') {
+            steps {
+                echo 'Entered Checkout ZoweI'
+                //sh 'git config --global user.name jitesh-a'
+                //sh 'git config --global user.email jitesh.om@gmail.com'
+                //sh 'git clone git@github.com:zowe/zlux.git --recurse-submodules'
+                checkout([$class: 'GitSCM',
+                 branches: [[name: '*/master']],
+                 doGenerateSubmoduleConfigurations: false,
+                 extensions: [[$class: 'SubmoduleOption',
+                              disableSubmodules: false,
+                              parentCredentials: true,
+                              recursiveSubmodules: true,
+                              reference: '',
+                              trackingSubmodules: true]],
+                 submoduleCfg: [],
+                 userRemoteConfigs: [[
+                      credentialsId: 'jahuja',
+                      url: 'https://github.com/zowe/zlux.git'
+                  ]]])
+            }
+        }
+        
+        stage('Untar Newton Unified UI') {
+            steps {
+                echo 'Entered Untar Newton Unifed UI'
+                sh 'mkdir ${PACKAGE_NAME} && tar xf newton-unified-ui.tar.gz -C ./${PACKAGE_NAME}'
+        
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                echo 'Entered Install'
+                sh 'cd ${PACKAGE_NAME} && npm i npx yarn'
+                sh 'cd ${PACKAGE_NAME} && npm i cross-env'
+                sh 'cd ${PACKAGE_NAME} && yarn install'
+                // sh 'cd ./zlux-app-manager/virtual-desktop && npm i webpack path os'
+                
+                //sh 'npx lerna@3.13.2 bootstrap --no-ci'
+               /* sh 'yarn build-dev'
+                sh 'yarn test-unit*/
+            }
+        }
+        
+        // stage('List') {
+        //     steps {
+        //         script {
+        //             echo 'Entered List'
+        //             sh 'ls -lh'
+        //         }
+        //     }
+        // }
+        
+        stage('Bootstrap') {
+            steps {
+               // sh 'npm i npx yarn'
+               // sh 'yarn install'
+                sh 'cd ${PACKAGE_NAME} && npx lerna@3.13.2 bootstrap --no-ci'
+            }
+        }
+        
+        stage ('Test ') {
+            steps {
+                sh 'cd ${PACKAGE_NAME} && chmod 775 ./jenkins/scripts/test.sh'
+                sh 'cd ${PACKAGE_NAME} && ./jenkins/scripts/test.sh'
+                //sh 'cd ${PACKAGE_NAME} && yarn build-zowe-prod'
+            }
+        }    
+        
+       stage ('Build ') {
+            steps {
+                sh 'cd ${PACKAGE_NAME} && chmod 775 ./jenkins/scripts/build-zowe-prod.sh'
+                sh 'cd ${PACKAGE_NAME} && ./jenkins/scripts/build-zowe-prod.sh'
+                // sh 'cd ${PACKAGE_NAME} && yarn build-zowe-prod'
+            }
+        }
+        
+        stage ('Create PAX Ready folder') {
+            steps {
+                sh 'cd ${PACKAGE_NAME} && chmod 775 ./scripts/prepare_release.sh'
+                //echo 'Entered Ctraete PAX Folder'
+                //sh 'mkdir newton-unified-ui-pax'
+                //echo 'Created directory'
+                sh 'cd ${PACKAGE_NAME} &&  ./scripts/prepare_release.sh ${PACKAGE_NAME}'
+            }
+        }
+        
+        stage('Package and deploy to RS/LPAR') {
+            steps {
+                echo 'Entered Package'
+                //sh "mkdir dist && cd dist && touch test.txt"
+                
+                sh "cd ${PACKAGE_NAME} && tar cf ${PACKAGE_NAME}.tar ./${PACKAGE_NAME}/"
+                // sh 'bash newton/ci/jenkins/package.sh ${PACKAGE_NAME} tar release'
+                script {
+                    withCredentials([
+                        usernamePassword(credentialsId: "nwtn01_pwd", 
+                        usernameVariable: "PAX_USERNAME", 
+                        passwordVariable: "PAX_PASSWORD")]) {
+                        
+                        echo "PAX_USERNAME=$PAX_USERNAME"
+                        echo "PAX_PASSWORD=$PAX_PASSWORD"
+                        
+                        def PAX_SERVER = [
+                          name         : SSH_HOSTNAME_ZOS,
+                          host         : SSH_HOSTNAME_ZOS,
+                          user         : PAX_USERNAME,
+                          password     : PAX_PASSWORD,
+                          allowAnyHosts: true
+                        ]
+                        
+                        def paxPackageDir = DEPLOY_DIR_ZOS
+                        
+                        sshCommand remote: PAX_SERVER, command: "rm -rf ${paxPackageDir} && mkdir -p ${paxPackageDir}"
+                        sshPut remote: PAX_SERVER, from: "./${PACKAGE_NAME}/${PACKAGE_NAME}.tar", into: "${paxPackageDir}/"
+                        sshCommand remote: PAX_SERVER, command:  \
+                            """
+                            cd ${paxPackageDir} &&
+                            mkdir ${PACKAGE_NAME} && cd ${PACKAGE_NAME} &&
+                            pax -r -x tar -o to=ISO8859-1 -f ../${PACKAGE_NAME}.tar &&
+                            pax -x os390 -w -f ../${PACKAGE_NAME}.pax * &&
+                            chtag  -R  -t -c ISO8859-1 ../${PACKAGE_NAME}.pax
+                            """
+                        sshGet remote: PAX_SERVER, from: "${paxPackageDir}/${PACKAGE_NAME}.pax", into: "${PACKAGE_NAME}.pax"
+                        sshCommand remote: PAX_SERVER, command: "rm -rf ${paxPackageDir}/${PACKAGE_NAME}"
+                    }
+                }
+            }
+        }
+        
+        // stage('Test') {
+        //     steps {
+        //         echo 'Entered Test'
+        //         //sh 'chmod 775 ./jenkins/scripts/test.sh'
+        //         //sh './jenkins/scripts/test.sh'
+        //     }
+        // }
+        
+        // stage('Deliver') {
+        //     steps {
+        //         echo 'Entered Deliver'
+        //         /*sh 'chmod 775 ./jenkins/scripts/deliver.sh'
+        //         sh './jenkins/scripts/deliver.sh'
+        //         input message: 'Finished using the web site? (Click "Proceed" to continue)'
+        //         sh 'chmod 775 ./jenkins/scripts/kill.sh'
+        //         sh './jenkins/scripts/kill.sh'*/
+        //     }
+        // }
+        
+        //stage('Deploy') {
+          //steps {
+            //echo 'Entered Deploy'
+            //sh 'bash newton/ci/jenkins/package.sh ${PACKAGE_NAME} zip release'
+            /*script {
+              TriggerJob('TAF', 'TAF-Deployments-Newton/Newton_Platform', [string(name: 'PAX_Branch', value: env.BRANCH_NAME)], false)
+            }*/
+          //}
+        //}
+        
+    }   
+}

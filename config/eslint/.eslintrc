@@ -1,0 +1,66 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "prettier",
+    "plugin:prettier/recommended",
+    "prettier/react",
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "settings": {
+    "react": {
+      "createClass": "createReactClass",
+      "pragma": "React",
+      "version": "16.8.6"
+    }
+  },
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "jest": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react",
+    "jest",
+    "prettier"
+  ],
+  "rules": {
+    "constructor-super": "warn",
+    "indent": [
+      "error",
+      2
+    ],
+    "no-console": "warn",
+    "no-const-assign": "warn",
+    "no-this-before-super": "warn",
+    "no-undef": "warn",
+    "no-unreachable": "warn",
+    "no-unused-vars": "warn",
+    "prettier/prettier": [
+      "error",
+      {
+        "jsxBracketSameLine": true,
+        "jsxSingleQuote": false,
+        "printWidth": 80,
+        "semi": true,
+        "singleQuote": true,
+        "tabWidth": 2,
+        "trailingComma": "es5"
+      }
+    ],
+    "react/jsx-indent": [
+      "warn",
+      2
+    ],
+    "react/forbid-prop-types": 0,
+    "valid-typeof": "warn"
+  }
+}

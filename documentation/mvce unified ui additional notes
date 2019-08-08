@@ -1,0 +1,25 @@
+MVCE UNIFIED UI README
+====================================
+
+README SECTIONS
+------------------------------------
+Clone Repo
+Configure Zowe Plugin
+Install Global Depenendecies
+Install Local Depenendecies
+Bootstrap Application
+Build Application
+Run Application
+
+Tips / Issues / To Do's
+------------------------------------
+Must run as admin always
+Drop repo under ZLUX root with the rest of plugins
+Rename root folder to newton-experience from mvce-unified-ui
+Update zlux-app-server/plugins configuration json file for new newton-experience plugin. Copy one of the existing json files and change the config data appropreiately 
+Add --stream argument to lerna calls
+
+Refactored Files & Folders
+-------------------------------------
+base-configuration/package.json
+"node-sass": "^4.11.0",

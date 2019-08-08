@@ -1,0 +1,6 @@
+{
+  "linters": {
+    "*.{ts,tsx,js,jsx}": ["eslint -c .eslintrc.js --ext .jsx,.js,.ts,.tsx --color --fix --no-eslintrc","git add"]
+  },
+  "ignore": ["**/package/*","*.config.js","**/web/*","**/webpack/*","**/scripts/*"]
+}

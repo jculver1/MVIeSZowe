@@ -1,0 +1,107 @@
+/* mixin for multiline */
+@mixin multiLineEllipsis($lineHeight: 1.2em, $lineCount: 1, $bgColor: white) {
+  overflow: hidden;
+  position: relative;
+  line-height: $lineHeight;
+  max-height: $lineHeight * $lineCount;
+  text-align: justify;
+  margin-right: -1em;
+  padding-right: 1em;
+  &:before {
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 1em;
+    height: 1em;
+    margin-top: 0.2em;
+    background: $bgColor;
+  }
+}
+
+/* table mixin */
+@mixin calc($property, $expression) {
+  #{$property}: -moz-calc(#{$expression});
+  #{$property}: -webkit-calc(#{$expression});
+  #{$property}: calc(#{$expression});
+}
+
+@mixin table-scrollable-no-overlay($table-width) {
+  $scrollbar-width: 1em;
+
+  thead {
+    @include calc(width, #{$table-width} - #{$scrollbar-width});
+  }
+
+  tbody {
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+}
+
+@mixin table-scrollable-overlay() {
+  tbody {
+    overflow-y: overlay;
+    overflow-x: hidden;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+}
+
+@mixin table-scrollable($table-max-height, $row-min-width, $row-widths...) {
+  thead,
+  tbody tr {
+    display: table;
+    table-layout: fixed;
+  }
+  thead {
+    width: 100%;
+  }
+
+
+  th,
+  td {
+    word-break: break-all;
+    word-break: break-word;
+    padding: 0.5rem;
+  }
+
+  th:not(.bx--table-column-checkbox) {
+    padding: 0;
+
+    button {
+      padding: 0.25rem
+    }
+  }
+
+  tbody {
+    display: block;
+    max-height: $table-max-height;
+
+    tr {
+      width: 100%;
+      min-width: $row-min-width;
+    }
+  }
+  @supports (overflow: overlay) {
+    @include table-scrollable-overlay();
+  }
+
+  @supports not (overflow: overlay) {
+    @include table-scrollable-no-overlay(100%);
+  }
+
+  $count: 1;
+  @each $row-width in $row-widths {
+    th:nth-child(#{$count}),
+    td:nth-child(#{$count}) {
+      width: $row-width;
+    }
+    $count: $count + 1;
+  }
+}
+  

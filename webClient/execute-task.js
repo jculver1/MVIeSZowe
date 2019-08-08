@@ -1,0 +1,1 @@
+require('@nwtn/baseline-configuration/execute-task');

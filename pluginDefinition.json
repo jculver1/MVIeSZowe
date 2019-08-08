@@ -1,0 +1,44 @@
+{
+  "identifier": "com.rs.newton.MVIeSZowe",
+  "apiVersion": "1.0.0",
+  "pluginVersion": "1.0.0",
+  "pluginType": "application",
+  "webContent": {
+    "framework": "react",
+    "launchDefinition": {
+      "pluginShortNameKey": "MVCloudExperience",
+      "pluginShortNameDefault": "MV Cloud Experience",
+      "imageSrc": "assets/logo.png"
+    },
+    "descriptionKey": "MV Cloud Experience Written in React",
+    "descriptionDefault": "MV Cloud Experience Written in React",
+    "isSingleWindowApp": true,
+    "defaultWindowStyle": {
+      "width": 1500,
+      "height": 800,
+      "x": 200,
+      "y": 50
+    }
+  },
+  "dataServices": [
+    {
+      "type": "external",
+      "name": "leibniz",
+      "urlPrefix": "",
+      "isHttps": false,
+      "version": "1.0.0"
+    }
+  ],
+  "configurationData": {
+    "resources": {
+      "requests": {
+        "aggregationPolicy": "override",
+        "subResources": {
+          "app": {
+            "aggregationPolicy": "override"
+          }
+        }
+      }
+    }
+  }
+}
