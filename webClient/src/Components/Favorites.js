@@ -11,7 +11,7 @@ const Favorites = (props) => {
                 {
                     props.favoriteList.map(movie => {
                         return (
-                            <div className="">
+                            <div key = {movie.id}className="">
                                 <div className="favoriteItem bg-white">
                                     <div className="pb-1">
                                         {movie.title}

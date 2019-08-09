@@ -13,7 +13,7 @@ const MovieInfo = (props) => {
                 {
                     aboutMovie.map(movie => {
                         return (
-                            <div className="px-5 py-1 aboutMovie">
+                            <div key={movie.id} className="px-5 py-1 aboutMovie">
                                 <div className='aboutMovie px-3 py-1 '>
                                     <div className='row'>
                                         <div className='col-5 titleStyles mt-1 d-flex align-items-center'>
@@ -35,7 +35,7 @@ const MovieInfo = (props) => {
                                         {movie.desc}
                                     </div>
                                     <div className='row d-flex justify-content-center py-2'>
-                                        <button onClick={() => props.addToFavorites(movie.id)} href="#" class="button orangeBtn text-white">Add to Favorites</button>
+                                        <button onClick={() => props.addToFavorites(movie.id)} href="#" className="button orangeBtn text-white">Add to Favorites</button>
                                     </div>
                                 </div>
                             </div>

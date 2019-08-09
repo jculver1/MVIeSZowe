@@ -14,9 +14,18 @@ class Main extends Component {
   genreArr = [...new Set(data.map(item => item.genre))]
   yearArr = [...new Set(data.map(item => item.theaterdate.slice(6)))]
 
+  propTypes = {
+    resources: PropTypes.object
+  };
+
   constructor(props) {
     super(props)
+    
+
+    const { resources } = props;
+    this.log = resources ? resources.logger : {};
     this.state = {
+      isExpanded: true,
       movieData: [],
       movieID: 0,
       favoriteList: [],
@@ -35,7 +44,7 @@ class Main extends Component {
         return response.json();
       })
       .then(myJson => {
-        console.log(myJson)
+       
         this.useState({
           movieData: myJson
         })
@@ -44,8 +53,7 @@ class Main extends Component {
   }
 
   getMovieInfo = (id) => {
-    console.log(id)
-    console.log('hello')
+
     this.setState({
       movieID: id
     })
@@ -80,7 +88,7 @@ class Main extends Component {
   }
 
   addToFavorites = (id) => {
-    console.log(id)
+
     let filterFavorites = this.state.favoriteList.filter(item => item.id === id)
     if (filterFavorites.length === 0) {
       const addMovie = data.filter(movie => movie.id === id)
@@ -91,7 +99,7 @@ class Main extends Component {
   }
 
   deleteFromFavorites = (e) => {
-    console.log(e)
+  
     let index = this.state.favoriteList.filter(item => item.id !== e)
     this.setState({
       favoriteList: index
@@ -108,12 +116,12 @@ class Main extends Component {
   render() {
     return (
       <div className="App no-gutters">
-        <div class="container-fluid ">
+        <div className="container-fluid ">
           <div style={{ height: '100vh', overflow: 'auto' }}>
             <div className='row no-gutters'>
               <div className="col-lg-2">
                 <StickyBox >
-                  <div class="d-flex justify-content-center Tools toolsContainer">
+                  <div className="d-flex justify-content-center Tools toolsContainer">
                     <Tools
                       ratingsArr={this.ratingsArr}
                       genreArr={this.genreArr}

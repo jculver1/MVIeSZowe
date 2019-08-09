@@ -6,7 +6,7 @@ const MovieList = (props) => {
     const autoShowMovies =
         data.slice(0, (props.numDisplay)).map(movie => {
             return (
-                <div className="px-8 py-2">
+                <div key= {movie.id} className="px-8 py-2">
                     <div key={movie} className="card shadow rounded mb-1 mx-4">
                         <div className="card-body d-flex justify-content-between row">
                             <h5 className="card-title col-6">{movie.title}</h5>
@@ -28,7 +28,7 @@ const MovieList = (props) => {
     const filteredMovies = 
         props.currentMovieList.slice(0, (props.numDisplay)).map(movie => {
             return (
-                <div className="px-5 py-2 ">
+                <div key= {movie.id} className="px-5 py-2 ">
                     <div className="card shadow rounded mb-1">
                         <div className="card-body">
                             <h5 className="card-title">{movie.title}</h5>
@@ -50,7 +50,7 @@ const MovieList = (props) => {
     const searchMovies = 
         props.currentMovieList.map(movie => {
             return (
-                <div className="px-5 py-2 ">
+                <div key={movie.id} className="px-5 py-2 ">
                     <div className="card shadow rounded mb-1">
                         <div className="card-body">
                             <h5 className="card-title">{movie.title}</h5>
