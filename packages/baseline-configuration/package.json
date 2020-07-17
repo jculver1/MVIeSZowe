@@ -23,7 +23,7 @@
     "carbon-components": "10.1.0",
     "carbon-components-react": "7.2.0",
     "carbon-icons": "7.0.7",
-    "lodash": "4.17.15",
+    "lodash": "4.17.19",
     "prop-types": "15.7.2",
     "react": "16.8.6",
     "react-dom": "16.8.6",
